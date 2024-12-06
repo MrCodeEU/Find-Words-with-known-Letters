@@ -1,0 +1,6 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"hello_world": "Hallo, {name} von de!",
+	"title": "Wörter mit bekannten Buchstaben suchen",
+	"search": "Bekannte Buchstaben"
+}
