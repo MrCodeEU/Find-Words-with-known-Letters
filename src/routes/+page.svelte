@@ -102,11 +102,13 @@
             </div>
         {:else}
             {#if results.length > 0}
-            <ul>
+            <div class="flex w-screen justify-center">
+            <div class="flex flex-wrap w-1/2 pt-16">
                 {#each results as word}
-                    <li>{word}</li>
+                    <div class="px-5">{word}</div>
                 {/each}
-            </ul>
+            </div>
+            </div>
             {:else}
                 {#if initialLoad}
                     <p>No words found</p>
