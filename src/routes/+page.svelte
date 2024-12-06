@@ -16,6 +16,11 @@
     async function findWords() {
         loading = true;
         if (!letters) return;
+        // check if no letters are entered
+        if (letters.length === 0) {
+            // TODO Notify user that no letters were entered (also other places)
+            return;
+        }
 
         //check that letters are single chars separated by commas
         const regex = /^[a-zA-Z](,[a-zA-Z])*$/;
@@ -43,6 +48,8 @@
         // add comma between each letter (if not already there)
         letters = letters.split('').filter(l => l !== ',').join(',');
     }
+
+// TODO Randomize color of badge
 
 </script>
 
@@ -103,9 +110,9 @@
         {:else}
             {#if results.length > 0}
             <div class="flex w-screen justify-center">
-            <div class="flex flex-wrap w-1/2 pt-16">
+            <div class="flex flex-wrap w-3/4 pt-16">
                 {#each results as word}
-                    <div class="px-5">{word}</div>
+                    <div class="m-3 p-5 badge preset-filled-primary-500 type-scale-3">{word}</div>
                 {/each}
             </div>
             </div>
