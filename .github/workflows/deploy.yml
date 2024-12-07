@@ -33,14 +33,20 @@ jobs:
         run: npm run build
 
       - name: Clean Remote Directory
-        uses: sozo-design/curl@v1.0.2
-        with:
-          args: '-X DELETE -H "Depth: infinity" -H "Content-Type: application/xml" --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" -L "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters"'
+        run: |
+          curl -X DELETE \
+          -H "Depth: infinity" \
+          -H "Content-Type: application/xml" \
+          --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" \
+          -L "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters" \
+          -f || echo "Directory doesn't exist or already deleted"
 
       - name: Create Remote Directory
-        uses: sozo-design/curl@v1.0.2
-        with:
-          args: -X MKCOL --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" -L "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters"
+        run: |
+          curl -X MKCOL \
+          --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" \
+          -L "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters" \
+          -f || echo "Failed to create directory, might already exist"
 
       - name: Deploy to WebDAV
         uses: XPH0816/webdav-deploy-action@v0.3
