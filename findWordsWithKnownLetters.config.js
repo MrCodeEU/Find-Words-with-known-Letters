@@ -2,8 +2,8 @@ module.exports = {
     apps: [
       {
         name: "findWordsWithKnownLetters",
-        script: "build/index.js",
-        watch: ["build"], // Watch only the build directory
+        script: "/srv/findWordsWithKnownLetters/build/index.js",
+        watch: false,
         env: {
           NODE_ENV: "production",
         },
