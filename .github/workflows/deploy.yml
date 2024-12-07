@@ -27,10 +27,17 @@ jobs:
           node-version: '22'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Project
         run: npm run build
+
+      - name: Prepare Deployment
+        run: |
+          # Copy node_modules to build directory
+          cp -r node_modules build/
+          # Copy package files
+          cp package*.json build/
 
       - name: Clean Remote Directory
         run: |
