@@ -15,47 +15,11 @@ on:
         - staging
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '22'
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build Project
-        run: npm run build
-
-      - name: Prepare Deployment
-        run: |
-          # Copy node_modules to build directory
-          cp -r node_modules build/
-          # Copy package files
-          cp package*.json build/
-
-      - name: Clean Remote Directory
-        run: |
-          curl -X DELETE \
-          --basic \
-          --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" \
-          -L -v \
-          --url "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters/" \
-          -f || echo "Directory doesn't exist or already deleted"
-
-      - name: Create Remote Directory
-        run: |
-          curl -X MKCOL \
-          --basic \
-          --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" \
-          -L -v \
-          --url "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters/" \
-          -f || echo "Failed to create directory, might already exist"
 
       - name: Deploy to WebDAV
         uses: XPH0816/webdav-deploy-action@v0.3
@@ -63,5 +27,5 @@ jobs:
           url: ${{ secrets.WEBDAV_URL }}
           username: ${{ secrets.WEBDAV_USERNAME }}
           password: ${{ secrets.WEBDAV_PASSWORD }}
-          remote: "./findWordsWithKnownLetters"
-          local: "build"
+          remote: "/findWordsWithKnownLetters"
+          local: "."
