@@ -36,8 +36,6 @@ jobs:
         run: |
           curl -X DELETE \
           --basic \
-          -H "Depth: infinity" \
-          -H "Content-Type: application/xml" \
           --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" \
           -L -v \
           --url "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters/" \
