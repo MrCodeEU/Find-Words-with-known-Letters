@@ -35,20 +35,12 @@ jobs:
       - name: Clean Remote Directory
         uses: sozo-design/curl@v1.0.2
         with:
-          args: >
-            -X DELETE 
-            -H "Content-Type: application/xml"
-            -H "Depth: infinity"
-            --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}"
-            "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters"
+          args: '-X DELETE -H "Depth: infinity" -H "Content-Type: application/xml" --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" -L "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters"'
 
       - name: Create Remote Directory
         uses: sozo-design/curl@v1.0.2
         with:
-          args: >
-            -X MKCOL
-            --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}"
-            "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters"
+          args: -X MKCOL --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" -L "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters"
 
       - name: Deploy to WebDAV
         uses: XPH0816/webdav-deploy-action@v0.3
