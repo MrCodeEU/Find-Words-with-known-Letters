@@ -11,16 +11,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Bun Runtime
-        uses: oven-sh/setup-bun@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          bun-version: latest
+          node-version: '22'
 
       - name: Install Dependencies
-        run: bun install
+        run: npm install
 
       - name: Build Project
-        run: bun run build
+        run: npm run build
 
       - name: Deploy to WebDAV
         uses: XPH0816/webdav-deploy-action@v0.3
