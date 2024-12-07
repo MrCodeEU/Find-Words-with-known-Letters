@@ -29,6 +29,7 @@ jobs:
           -L -v \
           --url "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters/" \
           -f || echo "Directory doesn't exist or already deleted"
+          
       - name: Create Remote Directory
         run: |
           curl -X MKCOL \
