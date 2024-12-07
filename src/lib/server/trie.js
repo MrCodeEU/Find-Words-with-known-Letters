@@ -1,9 +1,9 @@
-import pkg from 'word-graphs';
-const { Trie } = pkg;
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const { Trie } = require('word-graphs');
 import { promises as fs } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { base } from '$app/paths';
 
 // Get the directory path for the current module
 const __filename = fileURLToPath(import.meta.url);
