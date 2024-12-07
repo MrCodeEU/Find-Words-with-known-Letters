@@ -25,7 +25,7 @@ export async function initializeTries() {
             }
             
             // In production, read from build/client/words
-            return join(process.cwd(), 'client', 'words', filename);
+            return join(process.cwd(), 'build', 'client', 'words', filename);
         };
 
         // Load English words
