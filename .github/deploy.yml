@@ -1,0 +1,32 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun Runtime
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Build Project
+        run: bun run build
+
+      - name: Deploy to WebDAV
+        uses: XPH0816/webdav-deploy-action@v0.3
+        with:
+          url: ${{ secrets.WEBDAV_URL }}
+          username: ${{ secrets.WEBDAV_USERNAME }}
+          password: ${{ secrets.WEBDAV_PASSWORD }}
+          remote: "./findWordsWithKnownLetters"
+          local: "build"
