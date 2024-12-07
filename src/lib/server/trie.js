@@ -1,22 +1,36 @@
 import pkg from 'word-graphs';
-const {Trie} = pkg;
+const { Trie } = pkg;
 import { promises as fs } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { base } from '$app/paths';
 
 // Get the directory path for the current module
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Initialize tries for different languages
 const tries = new Map();
-
 const short = true;
 
 export async function initializeTries() {
     try {
+        // Function to get the correct file path based on environment
+        const getWordFilePath = (/** @type {string} */ language) => {
+            const filename = `${language}${short ? '_short' : ''}.txt`;
+            
+            // In development, read from src/lib/data
+            if (process.env.NODE_ENV === 'development') {
+                return join(__dirname, '..', 'data', 'words', filename);
+            }
+            
+            // In production, read from build/client/words
+            return join(process.cwd(), 'client', 'words', filename);
+        };
+
         // Load English words
         const enWords = await fs.readFile(
-            join(__dirname, `../../words/english${short ? '_short' : ''}.txt`), 
+            getWordFilePath('english'),
             'utf-8'
         );
         const enTrie = new Trie();
@@ -25,7 +39,7 @@ export async function initializeTries() {
 
         // Load German words
         const deWords = await fs.readFile(
-            join(__dirname, `../../words/german${short ? '_short' : ''}.txt`), 
+            getWordFilePath('german'),
             'utf-8'
         );
         const deTrie = new Trie();

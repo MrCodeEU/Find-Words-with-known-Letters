@@ -11,8 +11,6 @@ export async function GET({ params }) {
     try {
         const trie = getTrie(lang);
 
-        console.log('letters:', letters);
-
         console.log(`Finding words for ${lang} with letters ${letters}`);
         
         //const matchingWords = trie.containsAll(letters.split(','));
@@ -27,8 +25,8 @@ export async function GET({ params }) {
             letterCount.set(letter, (letterCount.get(letter) || 0) + 1);
         }
 
-        console.log('letterCount:', letterCount);
-        console.log('matchingWords:', matchingWords);
+        //console.log('letterCount:', letterCount);
+        //console.log('matchingWords:', matchingWords);
 
         // ffilter that contain the letters the wrong amount of times
         matchingWords = matchingWords.filter(word => {
@@ -39,7 +37,7 @@ export async function GET({ params }) {
 
             for (const [letter, count] of letterCount) {
                 if (wordLetterCount.get(letter) < count) {
-                    console.log(`Word ${word} does not contain ${letter} the right amount of times`);
+                    //console.log(`Word ${word} does not contain ${letter} the right amount of times`);
                     return false;
                 }
             }
