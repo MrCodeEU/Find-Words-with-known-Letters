@@ -3,6 +3,16 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - production
+        - staging
 
 jobs:
   build-and-deploy:
@@ -21,6 +31,24 @@ jobs:
 
       - name: Build Project
         run: npm run build
+
+      - name: Clean Remote Directory
+        uses: sozo-design/curl@v1.0.2
+        with:
+          args: >
+            -X DELETE 
+            -H "Content-Type: application/xml"
+            -H "Depth: infinity"
+            --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}"
+            "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters"
+
+      - name: Create Remote Directory
+        uses: sozo-design/curl@v1.0.2
+        with:
+          args: >
+            -X MKCOL
+            --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}"
+            "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters"
 
       - name: Deploy to WebDAV
         uses: XPH0816/webdav-deploy-action@v0.3
