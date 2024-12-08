@@ -25,9 +25,10 @@ jobs:
         with:
           node-version: '23.3'
           cache: 'npm'
+          cache-dependency-path: ./package.json
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install  # Changed from npm ci to npm install
 
       - name: Build
         run: npm run build
@@ -57,7 +58,7 @@ jobs:
           username: ${{ secrets.WEBDAV_USERNAME }}
           password: ${{ secrets.WEBDAV_PASSWORD }}
           remote: "/findWordsWithKnownLetters"
-          local: "build,node_modules,package.json"  # Only deploy specific directories/files
+          local: "build,node_modules,package.json"
           
       - name: Restart Application
         run: |
