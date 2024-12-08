@@ -57,7 +57,7 @@ jobs:
           url: ${{ secrets.WEBDAV_URL }}
           username: ${{ secrets.WEBDAV_USERNAME }}
           password: ${{ secrets.WEBDAV_PASSWORD }}
-          remote: "/findWordsWithKnownLetters"
+          remote: "/findWordsWithKnownLetters/build"
           local: "build"
       
       - name: Deploy Node_Modules to WebDAV
@@ -66,7 +66,7 @@ jobs:
           url: ${{ secrets.WEBDAV_URL }}
           username: ${{ secrets.WEBDAV_USERNAME }}
           password: ${{ secrets.WEBDAV_PASSWORD }}
-          remote: "/findWordsWithKnownLetters"
+          remote: "/findWordsWithKnownLetters/node_modules"
           local: "node_modules"
 
       - name: Deploy Package.json to WebDAV
@@ -75,7 +75,7 @@ jobs:
           url: ${{ secrets.WEBDAV_URL }}
           username: ${{ secrets.WEBDAV_USERNAME }}
           password: ${{ secrets.WEBDAV_PASSWORD }}
-          remote: "/findWordsWithKnownLetters"
+          remote: "/findWordsWithKnownLetters/package.json"
           local: "package.json"
           
       - name: Restart Application
