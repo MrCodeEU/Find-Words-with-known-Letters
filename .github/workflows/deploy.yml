@@ -33,32 +33,50 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Clean Remote Directory
-        run: |
-          curl -X DELETE \
-          --basic \
-          --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" \
-          -L -v \
-          --url "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters/" \
-          -f || echo "Directory doesn't exist or already deleted"
-
-      - name: Create Remote Directory
-        run: |
-          curl -X MKCOL \
-          --basic \
-          --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" \
-          -L -v \
-          --url "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters/" \
-          -f || echo "Failed to create directory, might already exist"
-
-      - name: Deploy to WebDAV
+      #- name: Clean Remote Directory
+      #  run: |
+      #    curl -X DELETE \
+      #    --basic \
+      #    --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" \
+      #    -L -v \
+      #    --url "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters/" \
+      #    -f || echo "Directory doesn't exist or already deleted"
+#
+      #- name: Create Remote Directory
+      #  run: |
+      #    curl -X MKCOL \
+      #    --basic \
+      #    --user "${{ secrets.WEBDAV_USERNAME }}:${{ secrets.WEBDAV_PASSWORD }}" \
+      #    -L -v \
+      #    --url "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters/" \
+      #    -f || echo "Failed to create directory, might already exist"
+#
+      - name: Deploy Build to WebDAV
         uses: XPH0816/webdav-deploy-action@v0.3
         with:
           url: ${{ secrets.WEBDAV_URL }}
           username: ${{ secrets.WEBDAV_USERNAME }}
           password: ${{ secrets.WEBDAV_PASSWORD }}
           remote: "/findWordsWithKnownLetters"
-          local: "build,node_modules,package.json"
+          local: "build"
+      
+      - name: Deploy Node_Modules to WebDAV
+        uses: XPH0816/webdav-deploy-action@v0.3
+        with:
+          url: ${{ secrets.WEBDAV_URL }}
+          username: ${{ secrets.WEBDAV_USERNAME }}
+          password: ${{ secrets.WEBDAV_PASSWORD }}
+          remote: "/findWordsWithKnownLetters"
+          local: "node_modules"
+
+      - name: Deploy Package.json to WebDAV
+        uses: XPH0816/webdav-deploy-action@v0.3
+        with:
+          url: ${{ secrets.WEBDAV_URL }}
+          username: ${{ secrets.WEBDAV_USERNAME }}
+          password: ${{ secrets.WEBDAV_PASSWORD }}
+          remote: "/findWordsWithKnownLetters"
+          local: "package.json"
           
       - name: Restart Application
         run: |
