@@ -13,13 +13,24 @@ on:
         options:
         - production
         - staging
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '23.3'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
 
       - name: Clean Remote Directory
         run: |
@@ -29,7 +40,7 @@ jobs:
           -L -v \
           --url "${{ secrets.WEBDAV_URL }}/findWordsWithKnownLetters/" \
           -f || echo "Directory doesn't exist or already deleted"
-          
+
       - name: Create Remote Directory
         run: |
           curl -X MKCOL \
@@ -46,4 +57,11 @@ jobs:
           username: ${{ secrets.WEBDAV_USERNAME }}
           password: ${{ secrets.WEBDAV_PASSWORD }}
           remote: "/findWordsWithKnownLetters"
-          local: "."
+          local: "build,node_modules,package.json"  # Only deploy specific directories/files
+          
+      - name: Restart Application
+        run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"method":"restart"}' \
+            http://${{ secrets.APP_HOST }}:3001/process/1/action
